@@ -81,3 +81,60 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.subnet1.id
   route_table_id = aws_route_table.pub_table.id
 }
+
+
+#crate ec2
+# Create Security Group for EC2 (allow SSH and HTTP)
+resource "aws_security_group" "ec2_sg" {
+  name        = "ec2_sg"
+  description = "Allow SSH and HTTP"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # ⚠️ Open to the world, for demo only
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "ec2_sg"
+  }
+}
+
+# Launch EC2 Instance in Public Subnet
+resource "aws_instance" "my_ec2" {
+  ami                    = "ami-0bdd88bd06d16ba03" # Example: Amazon Linux 2 in us-east-1, change per your region
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.subnet1.id
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+                #!/bin/bash
+                yum update -y
+                yum install nginx -y
+                systemctl enable nginx
+                systemctl start nginx
+                EOF
+
+  tags = {
+    Name = "sid-PublicEC2"
+  }
+}
