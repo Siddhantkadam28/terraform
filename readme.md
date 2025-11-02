@@ -1,6 +1,6 @@
 To initialize the Dev environment using the Dev state file:
 
-terraform init -backend-config="bucket=sid-bucket-terraform" -backend-config="key=dev/dev.statefile" -backend-config="region=us-east-1"
+terraform init -backend-config="bucket=sid-bucket-terraform" -backend-config="key=dev/dev.tfstatefile" -backend-config="region=us-east-1"
 
 
 Note:
