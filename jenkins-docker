@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "chadjpd/myapp"
+        DOCKER_IMAGE = "siddhant2812/myapp:latest"
         DOCKER_TAG   = "latest"
         DOCKER_CREDS = "dockerhub-creds"
     }
