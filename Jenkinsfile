@@ -46,10 +46,10 @@ pipeline {
 
   post {
     success {
-      echo '✅ Infrastructure provisioned successfully!'
+      echo 'infra provisioned successfully!'
     }
     failure {
-      echo '❌ Terraform pipeline failed'
+      echo ' Terraform pipeline failed'
     }
   }
 }
